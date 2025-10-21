@@ -99,24 +99,18 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
  *                   properties:
  *                     nombreCompleto:
  *                       type: string
- *                       example: Tu Nombre Completo
+ *                       example: Tomas Moisés Briceño Mayorca
  *                     cedula:
  *                       type: string
- *                       example: Tu Cédula
+ *                       example: 3114196
  *                     seccion:
  *                       type: string
- *                       example: Tu Sección
+ *                       example: 1
  */
 
 
 
-if (require.main === module) {
-  const port = process.env.PORT || 3000;
-  app.listen(port, () => {
-    console.log(`App escuchando en http://localhost:${port}`);
-    console.log(`Docs disponibles en http://localhost:${port}/api-docs`);
-  });
-}
+
 
 
 
