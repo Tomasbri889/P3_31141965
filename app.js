@@ -56,9 +56,10 @@ const swaggerDefinition = {
     description: 'Documentación de la API RESTful para P3_CEDULA',
   },
   servers: [
-    {
-      url: 'http://localhost:3000',
-    },
+    
+      { url: 'https://tuapp.onrender.com', description: 'Servidor en Render' },
+    { url: 'http://localhost:3000', description: 'Servidor local' },
+    
   ],
 };
 
