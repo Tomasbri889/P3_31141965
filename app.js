@@ -57,7 +57,7 @@ const swaggerDefinition = {
   },
   servers: [
     
-      { url: 'https://tuapp.onrender.com', description: 'Servidor en Render' },
+      { url: 'https://p3-31141965-2.onrender.com', description: 'Servidor en Render' },
     { url: 'http://localhost:3000', description: 'Servidor local' },
     
   ],
