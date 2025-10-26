@@ -9,19 +9,40 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Rutas principales
 app.use('/auth', authRoutes);
 app.use('/users', usersRoutes);
 
+// Swagger docs
 swagger(app);
 
-// Health routes required by original P3
+// Health routes requeridas
 app.get('/ping', (req, res) => res.status(200).end());
 app.get('/about', (req, res) => res.json({
   status: 'success',
-  data: { nombreCompleto: process.env.NOMBRE_COMPLETO || 'Tu Nombre', cedula: process.env.CEDULA || 'TU_CEDULA', seccion: process.env.SECCION || 'TU_SECCION' }
+  data: {
+    nombreCompleto: process.env.NOMBRE_COMPLETO || 'Tu Nombre',
+    cedula: process.env.CEDULA || 'TU_CEDULA',
+    seccion: process.env.SECCION || 'TU_SECCION'
+  }
 }));
 
-// Basic error handler
+// ✅ NUEVA RUTA RAÍZ
+app.get('/', (req, res) => {
+  res.status(200).json({
+    status: 'success',
+    message: 'API funcionando correctamente 🚀',
+    endpoints: {
+      docs: '/api-docs',
+      ping: '/ping',
+      about: '/about',
+      users: '/users',
+      auth: '/auth'
+    }
+  });
+});
+
+// Manejador de errores genérico
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({ status: 'error', message: 'Internal server error' });
