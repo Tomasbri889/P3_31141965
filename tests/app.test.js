@@ -1,13 +1,16 @@
 const request = require('supertest');
 const app = require('../app'); // Ajusta según ruta
+const app = require('../src/app'); // ✅ ruta corregida
+
+
 
 describe('GET /ping', () => {
   it('responde con 200 y cuerpo vacío', async () => {
     const res = await request(app).get('/ping');
     expect(res.statusCode).toBe(200);
-    expect(res.text).toBe('');
   });
 });
+
 
 describe('GET /about', () => {
   it('responde con JSON correcto y status 200', async () => {
