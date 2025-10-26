@@ -1,21 +1,31 @@
 {
   "name": "p3-31141965",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "API RESTful con JWT, SQLite y Swagger",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "test": "jest"
+    "start": "node src/server.js",
+    "dev": "NODE_ENV=development nodemon src/server.js",
+    "test": "cross-env NODE_ENV=test jest --runInBand --detectOpenHandles"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dotenv": "^17.2.3",
     "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.1",
+    "sequelize": "^6.37.7",
+    "sqlite3": "^5.1.7",
     "swagger-jsdoc": "^3.7.0",
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
+    "cross-env": "^10.1.0",
+    "eslint": "^9.38.0",
     "jest": "^30.2.0",
+    "nodemon": "^3.1.10",
     "supertest": "^7.1.4"
   }
 }
