@@ -5,34 +5,32 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main", "setup" ]
+    branches: [ setup ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ setup ]
 
 jobs:
-  test:
+  build-and-test:
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        node-version: [18]
-    steps:
-      - uses: actions/checkout@v4
+        node-version: [18.x]
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+    steps:
+      # 1️⃣ Clona el repositorio
+      - uses: actions/checkout@v3
+
+      # 2️⃣ Configura Node.js
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
 
+      # 3️⃣ Instala TODAS las dependencias (incluye devDependencies)
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Fix Jest permissions
-        run: chmod +x ./node_modules/.bin/jest || true
-
+      # 4️⃣ Ejecuta las pruebas (usa Jest y Supertest)
       - name: Run tests
-        env:
-          NODE_ENV: test
-          JWT_SECRET: test_secret
         run: npm test
-   
