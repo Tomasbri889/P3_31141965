@@ -14,8 +14,7 @@ const auth = require('../middleware/auth.middleware');
  *       200:
  *         description: List of users
  */
-router.get('/', auth, usersController.listUsers);
-
+router.get('/', userController.getAll);
 /**
  * @openapi
  * /users/{id}:
