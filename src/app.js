@@ -17,13 +17,36 @@ app.use('/users', usersRoutes);
 swagger(app);
 
 // Health routes requeridas
+
+
+/**
+ * @openapi
+ * /ping:
+ *   get:
+ *     summary: Verifica el estado del servidor
+ *     responses:
+ *       200:
+ *         description: Servidor activo
+ */
 app.get('/ping', (req, res) => res.status(200).end());
+
+/**
+ * @openapi
+ * /about:
+ *   get:
+ *     summary: Información del autor
+ *     responses:
+ *       200:
+ *         description: Datos del autor
+ */
+
+
 app.get('/about', (req, res) => res.json({
   status: 'success',
   data: {
-    nombreCompleto: process.env.NOMBRE_COMPLETO || 'Tu Nombre',
-    cedula: process.env.CEDULA || 'TU_CEDULA',
-    seccion: process.env.SECCION || 'TU_SECCION'
+    nombreCompleto: process.env.NOMBRE_COMPLETO || 'Tomas Briceño',
+    cedula: process.env.CEDULA || '31141965',
+    seccion: process.env.SECCION || '1'
   }
 }));
 
