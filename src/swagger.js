@@ -28,7 +28,8 @@ const swaggerDefinition = {
 const options = {
   swaggerDefinition,
   // 👇 Asegúrate de incluir todas tus rutas y el app principal
-   apis: ['./**/*.js'],
+   apis: ['./routes/*.js', './app.js']
+
 
 };
 
