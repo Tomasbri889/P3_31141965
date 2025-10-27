@@ -3,7 +3,7 @@ const router = express.Router();
 const authController = require('../controllers/auth.controller');
 
 /**
- * @openapi
+ * @swagger
  * /auth/register:
  *   post:
  *     summary: Register a new user
@@ -24,7 +24,7 @@ const authController = require('../controllers/auth.controller');
 router.post('/register', authController.register);
 
 /**
- * @openapi
+ * @swagger
  * /auth/login:
  *   post:
  *     summary: Login and receive a JWT token

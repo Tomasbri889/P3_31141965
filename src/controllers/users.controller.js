@@ -45,4 +45,7 @@ async function deleteUser(req, res) {
   return res.json({ status: 'success', data: { message: 'User deleted' } });
 }
 
+
+
+
 module.exports = { listUsers, getUser, createUser, updateUser, deleteUser };

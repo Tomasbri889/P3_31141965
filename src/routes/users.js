@@ -4,20 +4,39 @@ const usersController = require('../controllers/users.controller');
 const auth = require('../middleware/auth.middleware');
 
 /**
- * @openapi
+ * @swagger
  * /users:
  *   get:
- *     summary: List all users (protected)
- *     security:
- *       - bearerAuth: []
+ *     summary: Obtiene todos los usuarios
+ *     description: Devuelve una lista de todos los usuarios registrados.
+ *     tags:
+ *       - Users
  *     responses:
  *       200:
- *         description: List of users
+ *         description: Lista de usuarios obtenida correctamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                         example: 1
+ *                       name:
+ *                         type: string
+ *                         example: Tomas Briceño
  */
 router.get('/', auth, usersController.listUsers);
-
 /**
- * @openapi
+ * @swagger
  * /users/{id}:
  *   get:
  *     summary: Get user by id (protected)

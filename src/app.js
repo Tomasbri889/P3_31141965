@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const swagger = require('./swagger');
+const setupSwagger = require('./swagger');
 const authRoutes = require('./routes/auth');
 const usersRoutes = require('./routes/users');
 
@@ -10,17 +10,18 @@ app.use(cors());
 app.use(express.json());
 
 // Rutas principales
-app.use('/auth', authRoutes);
 app.use('/users', usersRoutes);
 
+app.use('/auth', authRoutes);
+
 // Swagger docs
-swagger(app);
+setupSwagger(app)
 
 // Health routes requeridas
 
 
 /**
- * @openapi
+ * @swagger
  * /ping:
  *   get:
  *     summary: Verifica el estado del servidor
@@ -31,7 +32,7 @@ swagger(app);
 app.get('/ping', (req, res) => res.status(200).end());
 
 /**
- * @openapi
+ * @swagger
  * /about:
  *   get:
  *     summary: Información del autor
