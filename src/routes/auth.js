@@ -14,9 +14,16 @@ const authController = require('../controllers/auth.controller');
  *           schema:
  *             type: object
  *             properties:
- *               nombreCompleto: { type: string }
- *               email: { type: string }
- *               password: { type: string }
+ *               nombreCompleto:
+ *                 type: string
+ *                 example: Tomas Briceño
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: tomas+test@example.com
+ *               password:
+ *                 type: string
+ *                 example: MiPassword123
  *     responses:
  *       201:
  *         description: User created
@@ -35,8 +42,13 @@ router.post('/register', authController.register);
  *           schema:
  *             type: object
  *             properties:
- *               email: { type: string }
- *               password: { type: string }
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: tomas+test@example.com
+ *               password:
+ *                 type: string
+ *                 example: MiPassword123
  *     responses:
  *       200:
  *         description: Token returned

@@ -15,6 +15,15 @@ const swaggerDefinition = {
     description: 'Verificando lectura de archivos y anotaciones @openapi',
   },
   servers: [{ url: baseUrl }],
+  components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT'
+      }
+    }
+  },
 };
 
 const options = {

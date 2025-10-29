@@ -17,8 +17,21 @@ async function register(req, res) {
     const user = await userService.createUser({ nombreCompleto, email, password });
     return res.status(201).json({ status: 'success', data: { id: user.id, nombreCompleto: user.nombreCompleto, email: user.email } });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ status: 'error', message: 'Internal server error' });
+    console.error(err && err.stack ? err.stack : err);
+    // Manejar errores comunes de Sequelize para dar respuestas más útiles
+    if (err.name === 'SequelizeValidationError') {
+      const details = err.errors ? err.errors.map((e) => e.message) : [err.message];
+      return res.status(400).json({ status: 'fail', data: { errors: details } });
+    }
+    if (err.name === 'SequelizeUniqueConstraintError') {
+      return res.status(409).json({ status: 'fail', data: { message: 'Unique constraint violation' } });
+    }
+
+    const body = { status: 'error', message: 'Internal server error' };
+    if (process.env.NODE_ENV !== 'production') {
+      body.debug = err && err.message ? err.message : String(err);
+    }
+    return res.status(500).json(body);
   }
 }
 
