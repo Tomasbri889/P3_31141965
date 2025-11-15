@@ -88,7 +88,7 @@ const auth = require('../middleware/auth.middleware');
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/ProductCreate'
+ *             $ref: '#/components/schemas/Product'
  *     responses:
  *       201:
  *         description: Product created
@@ -147,7 +147,7 @@ const auth = require('../middleware/auth.middleware');
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/ProductUpdate'
+ *             $ref: '#/components/schemas/Product'
  *     responses:
  *       200:
  *         description: Product updated
