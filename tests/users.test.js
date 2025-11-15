@@ -54,6 +54,15 @@ describe('Protected users routes', () => {
     expect(res.body.data).toHaveProperty('email');
   });
 
+  test('GET /users/:id (fail)', async () => {
+  const res = await request(app)
+    .get('/users/900')       // Cambias el ID aquí
+    .set('Authorization', `Bearer ${token}`);
+  expect(res.statusCode).toBe(404);
+  expect(res.body.data).toHaveProperty('message'); // Lo esperado en un error
+  
+});
+
   test('PUT /users/:id', async () => {
     const res = await request(app).put(`/users/${createdId}`).set('Authorization', `Bearer ${token}`)
       .send({ nombreCompleto: 'User A Updated' });
@@ -61,8 +70,26 @@ describe('Protected users routes', () => {
     expect(res.body.data.nombreCompleto).toBe('User A Updated');
   });
 
+
+
+  test('PUT /users/:id(fail)', async () => {
+    const res = await request(app).put(`/users/900`).set('Authorization', `Bearer ${token}`)
+    expect(res.statusCode).toBe(404);
+    expect(res.body.data).toHaveProperty('message');;
+
+  });
+
+
   test('DELETE /users/:id', async () => {
     const res = await request(app).delete(`/users/${createdId}`).set('Authorization', `Bearer ${token}`);
     expect(res.statusCode).toBe(200);
   });
+
+
+  test('DELETE /users/:id(fail)', async () => {
+    const res = await request(app).delete(`/users/900`).set('Authorization', `Bearer ${token}`);
+    expect(res.statusCode).toBe(404);
+     expect(res.body.data).toHaveProperty('message');;
+  });
+
 });

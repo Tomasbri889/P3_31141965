@@ -3,6 +3,10 @@ const cors = require('cors');
 const setupSwagger = require('./swagger');
 const authRoutes = require('./routes/auth');
 const usersRoutes = require('./routes/users');
+const categoriesRoutes = require('./routes/categories');
+const tagsRoutes = require('./routes/tags');
+const productsRoutes = require('./routes/products');
+const productsController = require('./controllers/products.controller');
 
 const app = express();
 
@@ -13,6 +17,14 @@ app.use(express.json());
 app.use('/users', usersRoutes);
 
 app.use('/auth', authRoutes);
+
+// Admin-protected resources
+app.use('/categories', categoriesRoutes);
+app.use('/tags', tagsRoutes);
+app.use('/products', productsRoutes);
+
+// Public self-healing product URL
+app.get('/p/:id-:slug', productsController.publicByIdSlug);
 
 // Swagger docs
 setupSwagger(app)
@@ -61,7 +73,11 @@ app.get('/', (req, res) => {
       ping: '/ping',
       about: '/about',
       users: '/users',
-      auth: '/auth'
+      auth: '/auth',
+      categories: '/categories',
+      tags: '/tags',
+      products: '/products',
+      product_public: '/p/:id-:slug'
     }
   });
 });

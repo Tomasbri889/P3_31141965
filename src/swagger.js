@@ -23,6 +23,45 @@ const swaggerDefinition = {
         bearerFormat: 'JWT'
       }
     }
+    ,
+    schemas: {
+      Category: {
+        type: 'object',
+        properties: {
+          id: { type: 'integer', example: 1 },
+          name: { type: 'string', example: 'Rock' },
+          description: { type: 'string', example: 'Discos de rock clásico' }
+        }
+      },
+      Tag: {
+        type: 'object',
+        properties: {
+          id: { type: 'integer', example: 1 },
+          name: { type: 'string', example: 'Importado' }
+        }
+      },
+      Product: {
+        type: 'object',
+        properties: {
+          id: { type: 'integer', example: 1 },
+          name: { type: 'string', example: 'GeForce RTX 3080' },
+          description: { type: 'string', example: 'Tarjeta gráfica de alto rendimiento para gaming y creación de contenido' },
+          price: { type: 'number', format: 'float', example: 29.99 },
+          stock: { type: 'integer', example: 5 },
+          brand: { type: 'string', example: 'NVIDIA' },
+          model: { type: 'string', example: 'RTX 3080' },
+          generation: { type: 'string', example: 'Ampere' },
+          socket: { type: 'string', example: 'PCIe 4.0' },
+          formFactor: { type: 'string', example: 'Full Height' },
+          wattage: { type: 'integer', example: 320 },
+          sku: { type: 'string', example: 'VIN-0001' },
+          condition: { type: 'string', example: 'New' },
+          slug: { type: 'string', example: 'geforce-rtx-3080' },
+          category: { $ref: '#/components/schemas/Category' },
+          tags: { type: 'array', items: { $ref: '#/components/schemas/Tag' } }
+        }
+      }
+    }
   },
 };
 
@@ -63,7 +102,107 @@ if (fs.existsSync(routesDir)) {
 // 🔍 Generar documentación
 const swaggerSpec = swaggerJsdoc(options);
 
-// 🔍 Imprimir diagnóstico del spec (claves principales)
+// � Inyección manual de rutas faltantes para asegurar visibilidad en UI
+// (se usan definiciones mínimas que referencian los schemas definidos arriba)
+const extraPaths = {
+  '/categories': {
+    get: {
+      summary: 'List categories (protected)',
+      security: [{ bearerAuth: [] }],
+      tags: ['Admin - Categories'],
+      responses: {
+        '200': { description: 'OK', content: { 'application/json': { schema: { type: 'object' } } } }
+      }
+    },
+    post: {
+      summary: 'Create category (protected)',
+      security: [{ bearerAuth: [] }],
+      tags: ['Admin - Categories'],
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/Category' }
+          }
+        }
+      },
+      responses: { '201': { description: 'Created' } }
+    }
+  },
+  '/categories/{id}': {
+    get: { summary: 'Get category', security: [{ bearerAuth: [] }], tags: ['Admin - Categories'], parameters: [{ name: 'id', in: 'path', required: true }], responses: { '200': { description: 'OK' } } },
+    put: { summary: 'Update category', security: [{ bearerAuth: [] }], tags: ['Admin - Categories'], parameters: [{ name: 'id', in: 'path', required: true }], responses: { '200': { description: 'OK' } } },
+    delete: { summary: 'Delete category', security: [{ bearerAuth: [] }], tags: ['Admin - Categories'], parameters: [{ name: 'id', in: 'path', required: true }], responses: { '200': { description: 'OK' } } }
+  },
+  '/tags': {
+    get: { summary: 'List tags', security: [{ bearerAuth: [] }], tags: ['Admin - Tags'], responses: { '200': { description: 'OK' } } },
+    post: { summary: 'Create tag', security: [{ bearerAuth: [] }], tags: ['Admin - Tags'], requestBody: { required: true, content: { 'application/json': { schema: { $ref: '#/components/schemas/Tag' } } } }, responses: { '201': { description: 'Created' } } }
+  },
+  '/tags/{id}': {
+    get: { summary: 'Get tag', security: [{ bearerAuth: [] }], tags: ['Admin - Tags'], parameters: [{ name: 'id', in: 'path', required: true }], responses: { '200': { description: 'OK' } } },
+    put: { summary: 'Update tag', security: [{ bearerAuth: [] }], tags: ['Admin - Tags'], parameters: [{ name: 'id', in: 'path', required: true }], responses: { '200': { description: 'OK' } } },
+    delete: { summary: 'Delete tag', security: [{ bearerAuth: [] }], tags: ['Admin - Tags'], parameters: [{ name: 'id', in: 'path', required: true }], responses: { '200': { description: 'OK' } } }
+  },
+  '/products': {
+    get: {
+      summary: 'Public list of products',
+      tags: ['Public - Products'],
+      parameters: [
+        { name: 'page', in: 'query' },
+        { name: 'limit', in: 'query' },
+        { name: 'category', in: 'query' },
+        { name: 'tags', in: 'query' },
+        { name: 'price_min', in: 'query' },
+        { name: 'price_max', in: 'query' },
+        { name: 'search', in: 'query' },
+        { name: 'brand', in: 'query' },
+        { name: 'model', in: 'query' },
+        { name: 'generation', in: 'query' }
+      ],
+      responses: { '200': { description: 'OK' } }
+    },
+    post: { summary: 'Create product', security: [{ bearerAuth: [] }], tags: ['Admin - Products'], responses: { '201': { description: 'Created' } } }
+  },
+  '/products/{id}': {
+    get: { summary: 'Get product by id (admin)', security: [{ bearerAuth: [] }], tags: ['Admin - Products'], parameters: [{ name: 'id', in: 'path', required: true }], responses: { '200': { description: 'OK' } } },
+    put: { summary: 'Update product', security: [{ bearerAuth: [] }], tags: ['Admin - Products'], parameters: [{ name: 'id', in: 'path', required: true }], responses: { '200': { description: 'OK' } } },
+    delete: { summary: 'Delete product', security: [{ bearerAuth: [] }], tags: ['Admin - Products'], parameters: [{ name: 'id', in: 'path', required: true }], responses: { '200': { description: 'OK' } } }
+  },
+  '/p/{id}-{slug}': {
+    get: { summary: 'Public product by id and slug (self-healing)', tags: ['Public - Products'], parameters: [{ name: 'id', in: 'path', required: true }, { name: 'slug', in: 'path', required: true }], responses: { '200': { description: 'OK' }, '301': { description: 'Redirect' } } }
+  }
+};
+
+// Merge extraPaths without overwriting any methods already detected by swagger-jsdoc.
+swaggerSpec.paths = swaggerSpec.paths || {};
+Object.keys(extraPaths).forEach((p) => {
+  if (!swaggerSpec.paths[p]) {
+    // path missing entirely: add it
+    swaggerSpec.paths[p] = extraPaths[p];
+    return;
+  }
+  // path exists: merge methods without overwriting
+  Object.keys(extraPaths[p]).forEach((method) => {
+    if (!swaggerSpec.paths[p][method]) {
+      swaggerSpec.paths[p][method] = extraPaths[p][method];
+    } else {
+      // method exists: ensure security is present if missing
+      if (!swaggerSpec.paths[p][method].security && extraPaths[p][method].security) {
+        swaggerSpec.paths[p][method].security = extraPaths[p][method].security;
+      }
+      // ensure requestBody is present when extraPaths provides one
+      if (!swaggerSpec.paths[p][method].requestBody && extraPaths[p][method].requestBody) {
+        swaggerSpec.paths[p][method].requestBody = extraPaths[p][method].requestBody;
+      }
+      // ensure parameters are present when extraPaths provides them
+      if ((!swaggerSpec.paths[p][method].parameters || swaggerSpec.paths[p][method].parameters.length === 0) && extraPaths[p][method].parameters) {
+        swaggerSpec.paths[p][method].parameters = extraPaths[p][method].parameters;
+      }
+    }
+  });
+});
+
+// �🔍 Imprimir diagnóstico del spec (claves principales)
 try {
   console.log('\n🧾 Claves generadas en swaggerSpec:', Object.keys(swaggerSpec || {}));
   // Imprimir un fragmento del JSON para inspección rápida
@@ -155,3 +294,5 @@ function setupSwagger(app) {
 }
 
 module.exports = setupSwagger;
+// expose the generated spec for debugging/tests
+module.exports.swaggerSpec = swaggerSpec;

@@ -7,6 +7,9 @@ describe('GET /ping', () => {
   it('responde con 200 y cuerpo vacío', async () => {
     const res = await request(app).get('/ping');
     expect(res.statusCode).toBe(200);
+    // verificar que no viene JSON y que el cuerpo está vacío
+    expect(res.text).toBe('');
+    expect(res.headers['content-type'] || '').not.toMatch(/application\/json/);
   });
 });
 
