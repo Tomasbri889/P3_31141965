@@ -1,6 +1,7 @@
 const request = require('supertest');
 const app = require('../src/app');
 const { sequelize, syncDB } = require('../src/models');
+const e = require('express');
 
 let token;
 let createdId;
@@ -32,7 +33,15 @@ describe('Protected users routes', () => {
     expect(res.statusCode).toBe(401);
   });
 
-  test('POST /users create user (protected) -> 201', async () => {
+test('POST /users create user missing fields -> 400', async () => {
+    const res = await request(app).post('/users')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ nombreCompleto: 'User A', email: '' });
+    expect(res.statusCode).toBe(400);
+    expect(res.body.status).toBe('fail');
+  });
+
+test('POST /users create user (protected) -> 201', async () => {
     const res = await request(app).post('/users')
       .set('Authorization', `Bearer ${token}`)
       .send({ nombreCompleto: 'User A', email: 'a@example.com', password: 'pwd' });
@@ -40,6 +49,15 @@ describe('Protected users routes', () => {
     expect(res.body.status).toBe('success');
     createdId = res.body.data.id;
   });
+
+  test('POST /users create user duplicate email -> 409', async () => {
+    const res = await request(app).post('/users')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ nombreCompleto: 'User B', email: 'a@example.com', password: 'pwd' });
+    expect(res.statusCode).toBe(409);
+    expect(res.body.status).toBe('fail');
+  });
+  
 
   test('GET /users (protected) -> list', async () => {
     const res = await request(app).get('/users').set('Authorization', `Bearer ${token}`);
@@ -78,7 +96,14 @@ describe('Protected users routes', () => {
     expect(res.body.data).toHaveProperty('message');;
 
   });
+  
 
+
+test('DELETE /users/:id without token -> 401', async () => {
+    const res = await request(app).delete(`/users/${createdId}`);
+    expect(res.statusCode).toBe(401)
+    expect(res.body.status).toBe('fail');
+  });
 
   test('DELETE /users/:id', async () => {
     const res = await request(app).delete(`/users/${createdId}`).set('Authorization', `Bearer ${token}`);

@@ -25,6 +25,13 @@ describe('Protected tags routes', () => {
     expect(res.statusCode).toBe(401);
   });
 
+   test('POST /tags create category missing fields -> 400', async () => {
+    const res = await request(app).post('/tags')
+      .set('Authorization', `Bearer ${token}`).send({ name: '' });
+    expect(res.statusCode).toBe(400);
+    expect(res.body.status).toBe('fail');
+  });
+
   test('POST /tags create tag (protected) -> 201', async () => {
     const res = await request(app).post('/tags')
       .set('Authorization', `Bearer ${token}`)
@@ -47,15 +54,44 @@ describe('Protected tags routes', () => {
     expect(res.body.data).toHaveProperty('name');
   });
 
+  test('GET /tags/:id fail', async ()=> {
+ const res= await request(app).get('/tags/9900').set('Authorization', `Bearer ${token}`);
+ expect(res.statusCode).toBe(404);
+ expect(res.body.status).toBe('fail');
+
+})
+
+
   test('PUT /tags/:id -> update', async () => {
     const res = await request(app).put(`/tags/${createdId}`).set('Authorization', `Bearer ${token}`)
       .send({ name: 'Gaming Updated' });
     expect(res.statusCode).toBe(200);
     expect(res.body.data.name).toBe('Gaming Updated');
   });
+test('PUT /tags/:id fail', async ()=> {
+ const res= await request(app).put('/tags/9900').set('Authorization', `Bearer ${token}`)
+      .send({ name: 'Non-existent Tag' });
+ expect(res.statusCode).toBe(404);
+ expect(res.body.status).toBe('fail');
+})  
+
+ 
+
+
+
 
   test('DELETE /tags/:id -> 200', async () => {
     const res = await request(app).delete(`/tags/${createdId}`).set('Authorization', `Bearer ${token}`);
     expect(res.statusCode).toBe(200);
+    expect(res.body.status).toBe('success');
+
   });
+
+  test('DELETE /tags/:id fail', async ()=> {
+ const res= await request(app).delete('/tags/9900').set('Authorization', `Bearer ${token}`);
+ expect(res.statusCode).toBe(404);
+ expect(res.body.status).toBe('fail');})
+
 });
+
+
