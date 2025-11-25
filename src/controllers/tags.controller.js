@@ -14,7 +14,7 @@ async function getTag(req, res) {
 
 async function createTag(req, res) {
   const { name } = req.body;
-  if (!name) return res.status(400).json({ status: 'fail', data: { message: 'Name required' } });
+  if (!name ) return res.status(400).json({ status: 'fail', data: { message: 'Name required' } });
   try {
     const tag = await tagRepo.createTag({ name });
     return res.status(201).json({ status: 'success', data: tag });
@@ -30,6 +30,10 @@ async function updateTag(req, res) {
   const id = req.params.id;
   const payload = req.body;
   const updated = await tagRepo.updateTag(id, payload);
+  if (!payload.name ) {
+    return res.status(400).json({ status: 'fail', data: { message: 'Name required' } });
+  }
+
   if (!updated) return res.status(404).json({ status: 'fail', data: { message: 'Tag not found' } });
   return res.json({ status: 'success', data: updated });
 }
@@ -37,6 +41,9 @@ async function updateTag(req, res) {
 async function deleteTag(req, res) {
   const id = req.params.id;
   const ok = await tagRepo.deleteTag(id);
+  if (!id) {
+    return res.status(400).json({ status: 'fail', data: { message: 'ID required' } });
+  }
   if (!ok) return res.status(404).json({ status: 'fail', data: { message: 'Tag not found' } });
   return res.json({ status: 'success', data: { message: 'Tag deleted' } });
 }

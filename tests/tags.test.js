@@ -74,7 +74,12 @@ test('PUT /tags/:id fail', async ()=> {
  expect(res.statusCode).toBe(404);
  expect(res.body.status).toBe('fail');
 })  
-
+ test('PUT /tags/:id missing fields -> 400', async () => {
+    const res = await request(app).put(`/tags/${createdId}`).set('Authorization', `Bearer ${token}`)
+      .send({ name:''});
+    expect(res.statusCode).toBe(400);
+    expect(res.body.status).toBe('fail');
+  });
  
 
 
