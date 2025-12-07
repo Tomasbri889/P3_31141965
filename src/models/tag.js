@@ -13,7 +13,7 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true
-    }
+    }    
   }, {
     sequelize,
     modelName: 'Tag',

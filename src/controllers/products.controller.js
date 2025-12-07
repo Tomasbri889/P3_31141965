@@ -9,7 +9,7 @@ async function createProduct(req, res) {
     const p = await productRepo.createProduct(payload);
     return res.status(201).json({ status: 'success', data: p });
   } catch (err) {
-    if (err.name === 'SequelizeUniqueConstraintError') {
+    if (err && err.name === 'SequelizeUniqueConstraintError') {
       return res.status(409).json({ status: 'fail', data: { message: 'SKU or slug conflict' } });
     }
     throw err;

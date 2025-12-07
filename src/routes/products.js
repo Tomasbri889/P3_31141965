@@ -88,7 +88,29 @@ const auth = require('../middleware/auth.middleware');
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Product'
+ *             type: object
+ *             required:
+ *               - name
+ *               - price
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               stock:
+ *                 type: integer
+ *               sku:
+ *                 type: string
+ *               categoryId:
+ *                 type: integer
+ *                 description: ID of an existing category
+ *               tags:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *                 description: Array of tag IDs
  *     responses:
  *       201:
  *         description: Product created
