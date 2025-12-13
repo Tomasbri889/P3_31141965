@@ -6,6 +6,7 @@ const usersRoutes = require('./routes/users');
 const categoriesRoutes = require('./routes/categories');
 const tagsRoutes = require('./routes/tags');
 const productsRoutes = require('./routes/products');
+const ordersRoutes = require('./routes/orders');
 const productsController = require('./controllers/products.controller');
 
 const app = express();
@@ -22,6 +23,7 @@ app.use('/auth', authRoutes);
 app.use('/categories', categoriesRoutes);
 app.use('/tags', tagsRoutes);
 app.use('/products', productsRoutes);
+app.use('/orders', ordersRoutes);
 
 // Public self-healing product URL
 app.get('/p/:id-:slug', productsController.publicByIdSlug);

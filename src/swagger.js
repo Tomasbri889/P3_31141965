@@ -61,6 +61,25 @@ const swaggerDefinition = {
           tags: { type: 'array', items: { $ref: '#/components/schemas/Tag' } }
         }
       }
+      ,
+      OrderItem: {
+        type: 'object',
+        properties: {
+          id: { type: 'integer' },
+          productId: { type: 'integer' },
+          quantity: { type: 'integer' },
+          unitprice: { type: 'number' }
+        }
+      },
+      Order: {
+        type: 'object',
+        properties: {
+          id: { type: 'integer' },
+          totalAmount: { type: 'number' },
+          status: { type: 'string' },
+          items: { type: 'array', items: { $ref: '#/components/schemas/OrderItem' } }
+        }
+      }
     }
   },
 };
