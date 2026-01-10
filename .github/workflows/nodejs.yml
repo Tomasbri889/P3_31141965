@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ new ]
+    branches: [ pago ]
   pull_request:
-    branches: [ new ]
+    branches: [ pago ]
 
 jobs:
   build-and-test:
