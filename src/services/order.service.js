@@ -4,14 +4,20 @@ const CreditCardPaymentStrategy = require('./creditCardPaymentStrategy');
 
 class OrderService {
   constructor() {
-    // maps paymentMethod to strategy
+    // maps paymentMethod to strategy. Accept several common keys (case-insensitive)
+    const ccStrategy = new CreditCardPaymentStrategy();
     this.strategies = {
-      CreditCard: new CreditCardPaymentStrategy()
+      CreditCard: ccStrategy,
+      creditcard: ccStrategy,
+      'credit_card': ccStrategy,
+      card: ccStrategy
     };
   }
 
   getStrategy(name) {
-    return this.strategies[name];
+    if (!name) return null;
+    // try direct match then lowercase lookup
+    return this.strategies[name] || this.strategies[String(name).toLowerCase()];
   }
 
   async checkout(userId, items, paymentMethod, paymentDetails) {

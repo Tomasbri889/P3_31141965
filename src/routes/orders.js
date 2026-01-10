@@ -4,12 +4,10 @@ const controller = require('../controllers/orders.controller');
 const auth = require('../middleware/auth.middleware');
 
 /**
- * @openapi
+ * @swagger
  * /orders:
  *   post:
- *     summary: Create order and process payment (protected, transactional)
- *     security:
- *       - bearerAuth: []
+ *     summary: Create order and process payment (guest allowed)
  *     requestBody:
  *       required: true
  *       content:
@@ -37,7 +35,6 @@ const auth = require('../middleware/auth.middleware');
  *     responses:
  *       201:
  *         description: Order created
- * /orders:
  *   get:
  *     summary: List authenticated user's orders
  *     security:
@@ -70,7 +67,7 @@ const auth = require('../middleware/auth.middleware');
  *         description: Order detail
  */
 
-router.post('/', auth, controller.createOrder);
+router.post('/', controller.createOrder);
 router.get('/', auth, controller.listOrders);
 router.get('/:id', auth, controller.getOrder);
 

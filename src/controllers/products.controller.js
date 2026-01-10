@@ -60,7 +60,7 @@ async function publicByIdSlug(req, res) {
  *   get:
  *     summary: Public product by id and slug (self-healing)
  *     tags:
- *       - Public - Products
+ *       - Products
  *     parameters:
  *       - name: id
  *         in: path
