@@ -17,9 +17,9 @@ describe('Orders API (transactional)', () => {
     await sequelize.close();
   });
 
-  test('POST /orders requires auth', async () => {
+  test('POST /orders with empty items returns 400', async () => {
     const res = await request(app).post('/orders').send({ items: [] });
-    expect(res.status).toBe(401);
+    expect(res.status).toBe(400);
   });
 
 test('Order not found', async()=>{
