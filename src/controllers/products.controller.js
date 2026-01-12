@@ -48,7 +48,7 @@ async function publicByIdSlug(req, res) {
   if (!p) return res.status(404).json({ status: 'fail', data: { message: 'Product not found' } });
   if (p.slug !== slug) {
     // redirect permanently to canonical
-    const url = `/p/${p.id}-${p.slug}`;
+    const url = `/p/${p.id}/${p.slug}`;
     return res.redirect(301, url);
   }
   return res.json({ status: 'success', data: p });
@@ -56,7 +56,7 @@ async function publicByIdSlug(req, res) {
 
 /**
  * @openapi
- * /p/{id}-{slug}:
+ * /p/{id}/{slug}:
  *   get:
  *     summary: Public product by id and slug (self-healing)
  *     tags:

@@ -227,7 +227,7 @@ router.get('/', controller.publicList);
 
 /**
  * @openapi
- * /products/p/{id}-{slug}:
+ * /products/p/{id}/{slug}:
  *   get:
  *     summary: Public product by id and slug (self-healing)
  *     tags:
@@ -263,7 +263,7 @@ router.get('/', controller.publicList);
  */
 
 // Public product by id and slug
-router.get('/p/:id-:slug', controller.publicByIdSlug);
+router.get('/p/:id/:slug', controller.publicByIdSlug);
 
 module.exports = router;
 

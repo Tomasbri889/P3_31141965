@@ -26,7 +26,7 @@ app.use('/products', productsRoutes);
 app.use('/orders', ordersRoutes);
 
 // Public self-healing product URL
-app.get('/p/:id-:slug', productsController.publicByIdSlug);
+app.get('/p/:id/:slug', productsController.publicByIdSlug);
 
 // Swagger docs
 setupSwagger(app)

@@ -187,7 +187,7 @@ const extraPaths = {
     put: { summary: 'Update product', security: [{ bearerAuth: [] }], tags: ['Admin - Products'], parameters: [{ name: 'id', in: 'path', required: true }], responses: { '200': { description: 'OK' } } },
     delete: { summary: 'Delete product', security: [{ bearerAuth: [] }], tags: ['Admin - Products'], parameters: [{ name: 'id', in: 'path', required: true }], responses: { '200': { description: 'OK' } } }
   },
-  '/p/{id}-{slug}': {
+  '/p/{id}/{slug}': {
     get: { summary: 'Public product by id and slug (self-healing)', tags: ['Public - Products'], parameters: [{ name: 'id', in: 'path', required: true }, { name: 'slug', in: 'path', required: true }], responses: { '200': { description: 'OK' }, '301': { description: 'Redirect' } } }
   }
 };
