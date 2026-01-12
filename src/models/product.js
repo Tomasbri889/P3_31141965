@@ -73,7 +73,22 @@ module.exports = (sequelize) => {
     tableName: 'products',
     hooks: {
       beforeValidate: async (product) => {
-        if (product.name) {
+        if (product.name && !product.slug) {
+          const base = slugify(product.name);
+          let slug = base;
+          const ProductModel = sequelize.models.Product || product.constructor;
+          let i = 0;
+          // ensure uniqueness (ignore self when updating)
+          const whereIdNe = product.id ? { id: { [Op.ne]: product.id } } : {};
+          while (await ProductModel.findOne({ where: { slug, ...whereIdNe } })) {
+            i += 1;
+            slug = `${base}-${i}`;
+          }
+          product.slug = slug;
+        }
+      },
+      beforeSave: async (product) => {
+        if (product.name && (!product.slug || product.changed('name'))) {
           const base = slugify(product.name);
           let slug = base;
           const ProductModel = sequelize.models.Product || product.constructor;

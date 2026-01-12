@@ -63,26 +63,22 @@ describe('Products routes (public & protected)', () => {
     expect(res.body.data.name).toBe('GTX 999 Ti');
   });
 
-  test('DELETE /products/:id -> 200', async () => {
-    const res = await request(app).delete(`/products/${productId}`).set('Authorization', `Bearer ${token}`);
-    expect(res.statusCode).toBe(200);
-  });
-
   test('GET /p/:id/:slug correct slug -> 200', async () => {
-    // First create a product to test
-    const payload = { name: 'Test Product', price: 100.00, stock: 5 };
-    const createRes = await request(app).post('/products').set('Authorization', `Bearer ${token}`).send(payload);
-    const testProductId = createRes.body.data.id;
-    const expectedSlug = 'test-product'; // based on slugify
-
-    const res = await request(app).get(`/p/${testProductId}/${expectedSlug}`);
+    // Use the product created in beforeAll, updated to 'GTX 999 Ti'
+    const expectedSlug = 'gtx-999-ti'; // slug for 'GTX 999 Ti'
+    const res = await request(app).get(`/p/${productId}/${expectedSlug}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.data.slug).toBe(expectedSlug);
   });
 
   test('GET /p/:id/:slug wrong slug -> 301 redirect', async () => {
-    const res = await request(app).get(`/p/1/wrong-slug`).redirects(0); // Don't follow redirects
+    const res = await request(app).get(`/p/${productId}/wrong-slug`).redirects(0); // Don't follow redirects
     expect(res.statusCode).toBe(301);
-    expect(res.headers.location).toBe('/p/1/test-product'); // Assuming product 1 has slug 'test-product'
+    expect(res.headers.location).toBe(`/p/${productId}/gtx-999-ti`);
+  });
+
+  test('DELETE /products/:id -> 200', async () => {
+    const res = await request(app).delete(`/products/${productId}`).set('Authorization', `Bearer ${token}`);
+    expect(res.statusCode).toBe(200);
   });
 });

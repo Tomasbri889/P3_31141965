@@ -225,45 +225,8 @@ router.delete('/:id', auth, controller.deleteProduct);
 // Public listing
 router.get('/', controller.publicList);
 
-/**
- * @openapi
- * /products/p/{id}/{slug}:
- *   get:
- *     summary: Public product by id and slug (self-healing)
- *     tags:
- *       - Products
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         schema:
- *           type: integer
- *       - name: slug
- *         in: path
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Product object
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: success
- *                 data:
- *                   $ref: '#/components/schemas/Product'
- *       301:
- *         description: Redirect to canonical URL when slug mismatches
- *       404:
- *         description: Product not found
- */
-
 // Public product by id and slug
-router.get('/p/:id/:slug', controller.publicByIdSlug);
+// router.get('/p/:id/:slug', controller.publicByIdSlug);
 
 module.exports = router;
 
