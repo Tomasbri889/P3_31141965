@@ -28,7 +28,6 @@ app.use('/users', usersRouter);
 
 
 
-
 app.get('/about', (req, res) => {
   res.json({
     status: "success",
@@ -43,8 +42,6 @@ app.get('/about', (req, res) => {
 app.get('/ping', (req, res) => {
   res.status(200).send();
 });
-
-
 
 
 
@@ -109,10 +106,46 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
  *                       example: 1
  */
 
+// -----------------------
+// Helper para handlers async
+// -----------------------
+// Envuelve un handler async para pasar errores a next() y que el middleware de errores los capture
+function asyncHandler(fn) {
+  return function (req, res, next) {
+    Promise.resolve(fn(req, res, next)).catch(next);
+  };
+}
 
+// Nota: Si tus rutas usan async/await, envuelve los handlers con asyncHandler para evitar excepciones no manejadas.
+// Ejemplo: router.post('/', asyncHandler(async (req, res) => { /* ... */ }));
 
+// -----------------------
+// Listeners globales para errores no capturados
+// -----------------------
+process.on('unhandledRejection', (reason, p) => {
+  console.error('Unhandled Rejection at:', p, 'reason:', reason);
+  // No forzamos el cierre aquí; en producción puede ser preferible reiniciar el proceso.
+});
 
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception thrown:', err && err.stack ? err.stack : err);
+  // Si prefieres reiniciar el proceso automáticamente, descomenta la siguiente línea:
+  // process.exit(1);
+});
 
-
+// -----------------------
+// Middleware global de manejo de errores
+// -----------------------
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err && err.stack ? err.stack : err);
+  if (res.headersSent) {
+    return next(err);
+  }
+  const statusCode = err && err.status ? err.status : 500;
+  res.status(statusCode).json({
+    status: 'error',
+    message: err && err.message ? err.message : 'Internal Server Error'
+  });
+});
 
 module.exports = app;
